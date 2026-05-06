@@ -11,7 +11,14 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
-import { LogOut, LayoutDashboard, Ticket, Rocket, Menu } from "lucide-react";
+import {
+  LogOut,
+  LayoutDashboard,
+  Ticket,
+  Rocket,
+  Menu,
+  Home, // ✅ added
+} from "lucide-react";
 import { useRoles } from "@/hooks/use-roles";
 import { Link, useNavigate } from "react-router";
 import { Button } from "./ui/button";
@@ -50,6 +57,16 @@ const NavBar = () => {
 
             {/* Desktop Nav */}
             <div className="hidden md:flex gap-8 text-sm font-medium">
+
+              {/* ✅ HOME BUTTON */}
+              <Link
+                to="/"
+                className="text-gray-400 hover:text-white transition-colors flex items-center gap-2"
+              >
+                <Home className="size-4" />
+                Home
+              </Link>
+
               {isOrganizer && (
                 <Link
                   to="/dashboard/events"
@@ -138,7 +155,17 @@ const NavBar = () => {
         {/* Mobile Menu */}
         {menuOpen && (
           <div className="md:hidden flex flex-col gap-4 pb-4">
-            
+
+            {/* ✅ HOME BUTTON */}
+            <Link
+              to="/"
+              className="text-gray-400 hover:text-white flex items-center gap-2"
+              onClick={() => setMenuOpen(false)}
+            >
+              <Home className="size-4" />
+              Home
+            </Link>
+
             {isOrganizer && (
               <Link
                 to="/dashboard/events"

@@ -162,7 +162,7 @@ const PublishedEventsPage = () => {
               <div className="sticky top-24 bg-gray-900/60 border border-white/10 rounded-3xl p-8 backdrop-blur-md shadow-2xl">
                 <div className="flex items-center gap-2 mb-6 opacity-50">
                   <Ticket className="size-4" />
-                  <span className="text-[10px] font-black uppercase tracking-[0.3em]">Order Summary Order Summary</span>
+                  <span className="text-[10px] font-black uppercase tracking-[0.3em]">Order Summary</span>
                 </div>
 
                 <div className="space-y-4 mb-8">

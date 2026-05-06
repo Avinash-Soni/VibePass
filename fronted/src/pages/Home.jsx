@@ -10,6 +10,7 @@ import { listPublishedEvents, searchPublishedEvents } from "@/lib/api";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import PublishedEventCard from "@/components/published-event-card";
 import { SimplePagination } from "@/components/simple-pagination";
+import { useRoles } from "@/hooks/use-roles";
 
 const Home = () => {
   const { token, isLoading, logout } = useAuth();
@@ -22,6 +23,7 @@ const Home = () => {
   const [publishedEvents, setPublishedEvents] = useState(undefined);
   const [error, setError] = useState(undefined);
   const [query, setQuery] = useState("");
+  const { isOrganizer, isAttendee } = useRoles();
 
   useEffect(() => {
     if (query && query.length > 0) {
@@ -88,34 +90,45 @@ const Home = () => {
           </div>
           
           <div className="flex items-center gap-3">
-            {isAuthenticated ? (
-              <div className="flex items-center gap-3">
-                {/* Organizers Page Link */}
-                <Button 
-                  variant="ghost" 
-                  onClick={() => navigate("/organizers")} 
-                  className="text-gray-400 hover:text-primary text-sm hidden md:flex items-center gap-2"
-                >
-                  <LayoutDashboard className="size-4" />
-                  Organizers
-                </Button>
-                
-                {/* User Symbol */}
-                <div className="size-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-primary">
-                  <User className="size-5" />
-                </div>
+           {isAuthenticated ? (
+  <div className="flex items-center gap-3">
 
-                <Button 
-                  variant="outline" 
-                  size="sm"
-                  className="border-white/10 hover:bg-red-500/10 hover:text-red-500 gap-2"
-                  onClick={() => logout()}
-                >
-                  <LogOut className="size-4" />
-                  <span className="hidden sm:inline">Log out</span>
-                </Button>
-              </div>
-            ) : (
+    {/* ✅ ORGANIZER BUTTON */}
+    {isOrganizer && (
+      <Button 
+        variant="ghost" 
+        onClick={() => navigate("/organizers")} 
+        className="text-gray-400 hover:text-primary text-sm hidden md:flex items-center gap-2"
+      >
+        <LayoutDashboard className="size-4" />
+        Organizer
+      </Button>
+    )}
+
+    {/* ✅ ATTENDEE BUTTON */}
+          {isAttendee && (
+            <Button 
+              variant="ghost" 
+              onClick={() => navigate("/dashboard/tickets")} 
+              className="text-gray-400 hover:text-primary text-sm hidden md:flex items-center gap-2"
+            >
+              <User className="size-4" />
+              My Tickets
+            </Button>
+          )}
+
+          {/* 🚪 LOGOUT */}
+          <Button 
+            variant="outline" 
+            size="sm"
+            className="border-white/10 hover:bg-red-500/10 hover:text-red-500 gap-2"
+            onClick={() => logout()}
+          >
+            <LogOut className="size-4" />
+            <span className="hidden sm:inline">Log out</span>
+          </Button>
+        </div>
+      ) : (
               <div className="flex gap-2">
                 <Button 
                   variant="ghost" 

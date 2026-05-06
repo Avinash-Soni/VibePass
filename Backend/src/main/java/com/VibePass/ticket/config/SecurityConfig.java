@@ -42,6 +42,8 @@ public class SecurityConfig {
                         authorize
                                 // 1. Public routes
                                 .requestMatchers("/api/v1/auth/**").permitAll()
+                                .requestMatchers("/api/likes/*/count").permitAll()
+                                .requestMatchers("/api/likes/*/status").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/v1/published-events/**").permitAll()
 
                                 // 2. Ticket Purchase: Allow both Attendees and Organizers
