@@ -2,10 +2,19 @@
 
 import * as React from "react";
 import { useEffect, useState } from "react";
-import { useAuth } from "@/context/AuthContext"; // ✅ Your custom context
+import { useAuth } from "@/context/AuthContext";
 import { Link, useNavigate, useParams } from "react-router";
-import { AlertCircle, MapPin, Ticket, ChevronRight } from "lucide-react";
+import {
+  AlertCircle,
+  MapPin,
+  Ticket,
+  ChevronRight,
+  Calendar,
+  Clock3,
+  Sparkles,
+} from "lucide-react";
 
+import { format } from "date-fns";
 import RandomEventImage from "@/components/random-event-image";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
@@ -14,12 +23,11 @@ import { getPublishedEvent } from "@/lib/api";
 import { cn } from "@/lib/utils";
 
 const PublishedEventsPage = () => {
-  // 1. Updated destructuring to use 'token' and 'logout'
   const { token, isLoading: isAuthLoading, logout } = useAuth();
+
   const navigate = useNavigate();
   const { id } = useParams();
 
-  // 2. Derive isAuthenticated from the presence of a token
   const isAuthenticated = !!token;
 
   const [error, setError] = useState(undefined);
@@ -36,161 +44,398 @@ const PublishedEventsPage = () => {
     const fetchEventDetails = async () => {
       try {
         setIsDataLoading(true);
+
         const eventData = await getPublishedEvent(id);
+
         setPublishedEvent(eventData);
+
         if (eventData.ticketTypes?.length > 0) {
           setSelectedTicketType(eventData.ticketTypes[0]);
         }
       } catch (err) {
-        setError(err instanceof Error ? err.message : "Unable to retrieve event details.");
+        setError(
+          err instanceof Error
+            ? err.message
+            : "Unable to retrieve event details."
+        );
       } finally {
         setIsDataLoading(false);
       }
     };
-    
+
     fetchEventDetails();
   }, [id]);
 
+  // ERROR
   if (error) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center p-6">
-        <Alert variant="destructive" className="max-w-md bg-gray-900 border-red-900/50">
-          <AlertCircle className="size-5" />
-          <AlertTitle className="font-bold">Error Error</AlertTitle>
-          <AlertDescription>{error}</AlertDescription>
+      <div className="min-h-screen bg-[#020617] flex items-center justify-center p-6">
+        <Alert className="max-w-md border-red-500/20 bg-red-500/10 backdrop-blur-xl">
+          <AlertCircle className="size-5 text-red-500" />
+
+          <AlertTitle className="text-white">
+            Something went wrong
+          </AlertTitle>
+
+          <AlertDescription className="text-gray-300">
+            {error}
+          </AlertDescription>
         </Alert>
       </div>
     );
   }
 
+  // LOADING
   if (isDataLoading || isAuthLoading) {
     return (
-      <div className="min-h-screen bg-black flex flex-col items-center justify-center text-white">
-        <div className="size-12 rounded-full border-t-2 border-primary animate-spin mb-4" />
-        <p className="text-xs font-bold tracking-[0.3em] uppercase opacity-50">Loading Event</p>
+      <div className="min-h-screen bg-[#020617] flex flex-col items-center justify-center text-white">
+        <div className="size-14 rounded-full border-4 border-primary/20" />
+
+        <div className="size-14 rounded-full border-4 border-primary border-t-transparent animate-spin absolute" />
+
+        <p className="mt-6 text-xs uppercase tracking-[0.3em] text-gray-500">
+          Loading Event
+        </p>
       </div>
     );
   }
 
   return (
-    <div className="bg-black min-h-screen text-white selection:bg-primary/30">
-      {/* Navigation */}
-      <nav className="border-b border-white/5 bg-black/60 backdrop-blur-xl sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-6 h-16 flex justify-between items-center">
-          <Link to="/" className="text-xl font-bold tracking-tighter hover:text-primary transition-colors">
-            VibePass
+    <div className="bg-[#020617] min-h-screen text-white overflow-hidden">
+      
+      {/* BACKGROUND */}
+      <div className="fixed inset-0 -z-10">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-primary/10 blur-[120px] rounded-full" />
+
+        <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-purple-500/10 blur-[120px] rounded-full" />
+      </div>
+
+      {/* NAVBAR */}
+      <nav className="sticky top-0 z-50 border-b border-white/10 bg-black/30 backdrop-blur-2xl">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+          
+          {/* LOGO */}
+          <Link
+            to="/"
+            className="flex items-center gap-2 group"
+          >
+            <div className="size-9 rounded-xl bg-primary flex items-center justify-center shadow-lg shadow-primary/20">
+              <Sparkles className="size-4 text-black" />
+            </div>
+
+            <div>
+              <h1 className="text-lg sm:text-xl font-black tracking-tight">
+                VibePass
+              </h1>
+
+              <p className="text-[9px] text-gray-500 hidden sm:block -mt-1">
+                Premium Event Access
+              </p>
+            </div>
           </Link>
-          <div className="flex gap-4">
+
+          {/* RIGHT */}
+          <div className="flex items-center gap-2">
             {isAuthenticated ? (
               <>
-                <Button variant="ghost" onClick={() => navigate("/dashboard")}>Dashboard</Button>
-                {/* 3. Use local logout function */}
-                <Button variant="outline" onClick={() => logout()}>Log out</Button>
+                <Button
+                  variant="ghost"
+                  onClick={() => navigate("/dashboard")}
+                  className="text-gray-300 hover:text-primary hover:bg-white/5 rounded-xl text-sm"
+                >
+                  Dashboard
+                </Button>
+
+                <Button
+                  variant="outline"
+                  onClick={() => logout()}
+                  className="border-white/10 bg-white/5 hover:bg-red-500/10 hover:text-red-500 rounded-xl text-sm"
+                >
+                  Logout
+                </Button>
               </>
             ) : (
-              /* 4. Navigate to local /login instead of Redirect function */
-              <Button className="bg-primary text-black hover:bg-primary/90" onClick={() => navigate("/login")}>Log in</Button>
+              <Button
+                onClick={() => navigate("/login")}
+                className="bg-primary hover:bg-primary/90 text-black font-semibold rounded-xl"
+              >
+                Login
+              </Button>
             )}
           </div>
         </div>
       </nav>
 
-      <main className="max-w-6xl mx-auto px-6 py-12">
-        {/* ... Rest of your existing JSX UI (Hero Section, Tickets Section, etc.) remains exactly the same ... */}
-        {/* Hero Section */}
-        <div className="grid md:grid-cols-2 gap-12 items-center mb-16">
-          <div className="space-y-6">
-            <Badge variant="outline" className="border-primary/30 text-primary">Live Event</Badge>
-            <h1 className="text-4xl md:text-6xl font-black tracking-tighter leading-none">
-              {publishedEvent?.name}
-            </h1>
-            <div className="flex items-center gap-3 text-gray-400 text-lg font-medium">
-              <div className="size-10 rounded-full bg-white/5 flex items-center justify-center">
-                <MapPin className="size-5 text-primary" />
+      {/* MAIN */}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
+        
+        {/* HERO */}
+        <div className="grid lg:grid-cols-2 gap-10 items-center mb-14">
+          
+          {/* LEFT */}
+          <div className="space-y-6 order-2 lg:order-1">
+            
+            <Badge
+              variant="outline"
+              className="border-primary/20 bg-primary/10 text-primary"
+            >
+              Live Event
+            </Badge>
+
+            {/* TITLE */}
+            <div>
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-black leading-[1.1] tracking-tight">
+                {publishedEvent?.name}
+              </h1>
+            </div>
+
+            {/* VENUE */}
+            <div className="flex items-start gap-3">
+              <div className="size-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center shrink-0">
+                <MapPin className="size-4 text-primary" />
               </div>
-              {publishedEvent?.venue}
+
+              <div>
+                <p className="text-[11px] uppercase tracking-[0.2em] text-gray-500 mb-1">
+                  Venue
+                </p>
+
+                <p className="text-sm sm:text-base text-gray-300 font-medium">
+                  {publishedEvent?.venue}
+                </p>
+              </div>
+            </div>
+
+            {/* DATE & TIME */}
+            <div className="flex flex-col sm:flex-row gap-4">
+              
+              {/* DATE */}
+              <div className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 backdrop-blur-xl">
+                <div className="size-10 rounded-xl bg-primary/10 flex items-center justify-center">
+                  <Calendar className="size-4 text-primary" />
+                </div>
+
+                <div>
+                  <p className="text-[10px] uppercase tracking-[0.2em] text-gray-500">
+                    Date
+                  </p>
+
+                  <p className="text-sm font-medium text-gray-300">
+                    {publishedEvent?.start && publishedEvent?.end
+                      ? `${format(
+                          new Date(publishedEvent.start),
+                          "MMM d"
+                        )} - ${format(
+                          new Date(publishedEvent.end),
+                          "MMM d, yyyy"
+                        )}`
+                      : "TBA"}
+                  </p>
+                </div>
+              </div>
+
+              {/* TIME */}
+              <div className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 backdrop-blur-xl">
+                <div className="size-10 rounded-xl bg-primary/10 flex items-center justify-center">
+                  <Clock3 className="size-4 text-primary" />
+                </div>
+
+                <div>
+                  <p className="text-[10px] uppercase tracking-[0.2em] text-gray-500">
+                    Time
+                  </p>
+
+                  <p className="text-sm font-medium text-gray-300">
+                    {publishedEvent?.start
+                      ? format(
+                          new Date(publishedEvent.start),
+                          "hh:mm a"
+                        )
+                      : "TBA"}
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
-          
-          <div className="rounded-[2rem] overflow-hidden aspect-video md:aspect-square shadow-2xl border border-white/10 group">
-            <RandomEventImage className="group-hover:scale-105 transition-transform duration-700" />
+
+          {/* IMAGE */}
+          <div className="order-1 lg:order-2">
+            <div className="relative rounded-[2rem] overflow-hidden border border-white/10 shadow-2xl group">
+              
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent z-10" />
+
+              <div className="h-[220px] sm:h-[280px] md:h-[340px] overflow-hidden">
+                <RandomEventImage className="group-hover:scale-105 transition-transform duration-700" />
+              </div>
+
+              <div className="absolute top-4 left-4 z-20 px-3 py-1.5 rounded-full bg-black/50 backdrop-blur-xl border border-white/10 text-xs font-semibold">
+                🔥 Trending Event
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* Tickets Section */}
+        {/* TICKETS */}
         <section>
+          
+          {/* HEADER */}
           <div className="flex items-center gap-4 mb-8">
-            <h2 className="text-2xl font-bold tracking-tight">Select Tickets</h2>
-            <div className="h-px flex-1 bg-white/5" />
+            <div>
+              <p className="text-primary text-xs uppercase tracking-[0.25em] font-semibold mb-1">
+                Tickets
+              </p>
+
+              <h2 className="text-2xl sm:text-3xl font-black tracking-tight">
+                Choose Your Pass
+              </h2>
+            </div>
+
+            <div className="h-px flex-1 bg-white/10" />
           </div>
 
-          <div className="grid lg:grid-cols-5 gap-8">
-            {/* Ticket List */}
-            <div className="lg:col-span-3 space-y-4">
-              {publishedEvent?.ticketTypes?.map((ticketType) => (
-                <Card
-                  key={ticketType.id}
-                  className={cn(
-                    "bg-gray-900/40 border-white/5 cursor-pointer transition-all duration-300 hover:border-white/20",
-                    selectedTicketType?.id === ticketType.id && "border-primary/50 bg-primary/5 ring-1 ring-primary/20"
-                  )}
-                  onClick={() => setSelectedTicketType(ticketType)}
-                >
-                  <CardHeader className="pb-2">
-                    <div className="flex justify-between items-start">
-                      <h3 className="text-xl font-bold tracking-tight">{ticketType.name}</h3>
-                      <span className="text-2xl font-black text-primary">₹{ticketType.price}</span>
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-gray-400 text-sm leading-relaxed">
+          {/* CONTENT */}
+          <div className="grid xl:grid-cols-5 gap-8">
+            
+            {/* LEFT */}
+            <div className="xl:col-span-3 space-y-4">
+              {publishedEvent?.ticketTypes?.map((ticketType) => {
+                const availableTickets =
+                  ticketType.remainingTickets ??
+                  ticketType.totalAvailable;
+
+                const isAvailable = availableTickets > 0;
+
+                return (
+                  <Card
+                    key={ticketType.id}
+                    onClick={() => setSelectedTicketType(ticketType)}
+                    className={cn(
+                      "rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl cursor-pointer transition-all duration-300 hover:border-primary/30 hover:bg-primary/5",
+                      selectedTicketType?.id === ticketType.id &&
+                        "border-primary bg-primary/10 ring-1 ring-primary/30"
+                    )}
+                  >
+                    <CardHeader className="pb-3">
+                      <div className="flex items-start justify-between gap-4">
+                        
+                        <div>
+                          <h3 className="text-lg sm:text-xl font-bold tracking-tight">
+                            {ticketType.name}
+                          </h3>
+
+                          <p className="text-xs text-gray-500 mt-1">
+                            Premium Event Access
+                          </p>
+                        </div>
+
+                        <div className="text-right">
+                          <h2 className="text-2xl sm:text-3xl font-black text-primary">
+                            ₹{ticketType.price}
+                          </h2>
+
+                          <p className="text-[10px] uppercase tracking-widest text-gray-500">
+                            per ticket
+                          </p>
+                        </div>
+                      </div>
+                    </CardHeader>
+
+                    <CardContent>
+                      <p className="text-sm text-gray-400 leading-relaxed">
                         {ticketType.description}
                       </p>
 
-                      <p className="text-[11px] text-gray-400 mt-2 font-medium">
-                        {(ticketType.remainingTickets ?? ticketType.totalAvailable) > 0
-                          ? `${ticketType.remainingTickets ?? ticketType.totalAvailable} tickets left`
-                          : "Sold Out"}
-                      </p>
-                  </CardContent>
-                </Card>
-              ))}
+                      <div className="mt-5 flex items-center justify-between">
+                        
+                        {/* AVAILABLE */}
+                        <div
+                          className={cn(
+                            "px-3 py-1 rounded-full text-[11px] font-semibold",
+                            isAvailable
+                              ? "bg-green-500/15 text-green-400 border border-green-500/20"
+                              : "bg-red-500/10 text-red-400 border border-red-500/20"
+                          )}
+                        >
+                          {isAvailable
+                            ? `${availableTickets} Tickets Available`
+                            : "Sold Out"}
+                        </div>
+
+                        {/* SELECTED */}
+                        {selectedTicketType?.id === ticketType.id && (
+                          <div className="px-3 py-1 rounded-full bg-primary/20 text-primary text-[10px] font-bold uppercase tracking-widest">
+                            Selected
+                          </div>
+                        )}
+                      </div>
+                    </CardContent>
+                  </Card>
+                );
+              })}
             </div>
 
-            {/* Sticky Checkout Panel */}
-            <div className="lg:col-span-2">
-              <div className="sticky top-24 bg-gray-900/60 border border-white/10 rounded-3xl p-8 backdrop-blur-md shadow-2xl">
-                <div className="flex items-center gap-2 mb-6 opacity-50">
-                  <Ticket className="size-4" />
-                  <span className="text-[10px] font-black uppercase tracking-[0.3em]">Order Summary</span>
+            {/* RIGHT */}
+            <div className="xl:col-span-2">
+              <div className="xl:sticky xl:top-24 rounded-[2rem] border border-white/10 bg-black/40 backdrop-blur-2xl p-6 sm:p-8 shadow-2xl">
+                
+                {/* TOP */}
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="size-10 rounded-xl bg-primary/10 flex items-center justify-center">
+                    <Ticket className="size-4 text-primary" />
+                  </div>
+
+                  <div>
+                    <p className="text-[10px] uppercase tracking-[0.25em] text-gray-500">
+                      Checkout
+                    </p>
+
+                    <h3 className="text-sm font-semibold">
+                      Order Summary
+                    </h3>
+                  </div>
                 </div>
 
-                <div className="space-y-4 mb-8">
+                {/* CONTENT */}
+                <div className="space-y-5">
                   <div>
-                    <h3 className="text-2xl font-bold">{selectedTicketType?.name}</h3>
-                    <p className="text-sm text-gray-500 mt-1">Single Entry Pass</p>
+                    <p className="text-xs uppercase tracking-widest text-gray-500 mb-2">
+                      Selected Ticket
+                    </p>
+
+                    <h2 className="text-2xl font-black">
+                      {selectedTicketType?.name}
+                    </h2>
+
+                    <p className="text-sm text-gray-400 mt-2 leading-relaxed">
+                      {selectedTicketType?.description}
+                    </p>
                   </div>
-                  <div className="text-4xl font-black tracking-tighter text-white">
-                    ₹{selectedTicketType?.price}
+
+                  <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
+                    <p className="text-xs uppercase tracking-[0.2em] text-gray-500 mb-2">
+                      Total Price
+                    </p>
+
+                    <h1 className="text-4xl font-black text-primary">
+                      ₹{selectedTicketType?.price}
+                    </h1>
                   </div>
-                  <p className="text-sm text-gray-400 leading-relaxed italic">
-                    "{selectedTicketType?.description}"
+
+                  {/* BUTTON */}
+                  <Link
+                    to={`/events/${publishedEvent?.id}/purchase/${selectedTicketType?.id}`}
+                    className="block"
+                  >
+                    <Button className="w-full h-14 rounded-2xl bg-primary hover:bg-primary/90 text-black text-base font-bold shadow-xl shadow-primary/20">
+                      Continue Checkout
+                      <ChevronRight className="size-5 ml-1" />
+                    </Button>
+                  </Link>
+
+                  <p className="text-center text-[10px] uppercase tracking-[0.2em] text-gray-600 pt-2">
+                    Secure checkout powered by VibePass
                   </p>
                 </div>
-
-                <Link
-                  to={`/events/${publishedEvent?.id}/purchase/${selectedTicketType?.id}`}
-                  className="block group"
-                >
-                  <Button className="w-full h-14 bg-primary text-black font-bold text-lg rounded-2xl hover:bg-primary/90 shadow-xl shadow-primary/20 transition-transform active:scale-95 flex items-center justify-center gap-2">
-                    Checkout Now
-                    <ChevronRight className="size-5 group-hover:translate-x-1 transition-transform" />
-                  </Button>
-                </Link>
-                
-                <p className="mt-6 text-center text-[10px] text-gray-600 font-medium uppercase tracking-widest">
-                  Secure checkout powered by VibePass
-                </p>
               </div>
             </div>
           </div>
@@ -200,13 +445,17 @@ const PublishedEventsPage = () => {
   );
 };
 
-// Internal Badge for the header
+// BADGE
 const Badge = ({ children, className, variant }) => (
-  <span className={cn(
-    "px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest border",
-    variant === "outline" ? "border-white/20 text-gray-400" : "bg-primary text-black border-transparent",
-    className
-  )}>
+  <span
+    className={cn(
+      "px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest border",
+      variant === "outline"
+        ? "border-white/20 text-gray-400"
+        : "bg-primary text-black border-transparent",
+      className
+    )}
+  >
     {children}
   </span>
 );
