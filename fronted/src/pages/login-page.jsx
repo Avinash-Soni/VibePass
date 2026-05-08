@@ -3,6 +3,7 @@ import { useAuth } from "@/context/AuthContext";
 import { useNavigate, useLocation } from "react-router"; // 👈 Add useLocation
 import { ShieldCheck, Loader2 } from "lucide-react";
 import axios from "axios";
+import { API_BASE_URL } from "@/config";
 
 
 const LoginPage = () => {
@@ -23,7 +24,7 @@ const handleLogin = async (e) => {
 
   try {
     // Axios automatically stringifies the body and sets Content-Type to application/json
-    const response = await axios.post("http://localhost:8080/api/v1/auth/login", {
+    const response = await axios.post(`${API_BASE_URL}/api/v1/auth/login`, {
       email,
       password,
     });

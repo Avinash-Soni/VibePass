@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { UserPlus, Loader2, Mail, Lock, User, Ticket, Calendar } from "lucide-react";
 import axios from "axios";
+import { API_BASE_URL } from "@/config";
 
 const SignupPage = () => {
   const [step, setStep] = useState(0); // 0: Role Selection, 1: Signup Form
@@ -28,7 +29,7 @@ const SignupPage = () => {
     setIsSubmitting(true);
 
     try {
-      await axios.post("http://localhost:8080/api/v1/auth/signup", formData);
+      await axios.post(`${API_BASE_URL}/api/v1/auth/signup`, formData);
       alert("Account created successfully! Please login.");
       navigate("/login");
     } catch (error) {
