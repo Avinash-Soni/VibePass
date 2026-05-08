@@ -3,7 +3,7 @@
 import { isErrorResponse } from "@/domain/domain";
 
 // ✅ 1. Define the Base URL at the top
-const API_BASE_URL = "http://localhost:8080";
+const API_BASE_URL = "https://vibepass-944b.onrender.com";
 
 /**
  * Helper to handle API responses and consistent error throwing
