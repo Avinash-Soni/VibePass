@@ -27,7 +27,9 @@ const PublishedEventCard = ({ publishedEvent }) => {
         const statusRes = await fetch(`${API_BASE_URL}/api/likes/${eventId}/status`, {
           headers: token ? { Authorization: `Bearer ${token}` } : {},
         });
-        const countRes = await fetch(`${API_BASE_URL}/api/likes/${eventId}`);
+        const countRes = await fetch(
+          `${API_BASE_URL}/api/likes/${eventId}/count`
+        );
         let status = false;
         let count = 0;
         if (statusRes.ok) status = await statusRes.json();
@@ -50,12 +52,15 @@ const PublishedEventCard = ({ publishedEvent }) => {
       return;
     }
     try {
-      const res = await fetch(`/api/likes/${eventId}`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const res = await fetch(
+          `${API_BASE_URL}/api/likes/${eventId}`,
+          {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
       if (!res.ok) return;
 
       setLiked((prevLiked) => {
