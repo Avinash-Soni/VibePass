@@ -23,10 +23,10 @@ const PublishedEventCard = ({ publishedEvent }) => {
   React.useEffect(() => {
     const fetchLikes = async () => {
       try {
-        const statusRes = await fetch(`/api/likes/${eventId}/status`, {
+        const statusRes = await fetch(`${API_BASE_URL}/api/likes/${eventId}/status`, {
           headers: token ? { Authorization: `Bearer ${token}` } : {},
         });
-        const countRes = await fetch(`/api/likes/${eventId}/count`);
+        const countRes = await fetch(`${API_BASE_URL}/api/likes/${eventId}`);
         let status = false;
         let count = 0;
         if (statusRes.ok) status = await statusRes.json();
