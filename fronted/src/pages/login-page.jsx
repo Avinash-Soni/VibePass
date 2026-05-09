@@ -3,7 +3,7 @@ import { useAuth } from "@/context/AuthContext";
 import { useNavigate, useLocation } from "react-router"; // 👈 Add useLocation
 import { ShieldCheck, Loader2 } from "lucide-react";
 import axios from "axios";
-import { API_BASE_URL } from "@/config";
+import { API_BASE_URL } from "../config.js";
 
 
 const LoginPage = () => {
