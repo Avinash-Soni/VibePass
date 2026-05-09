@@ -12,6 +12,7 @@ import {
 import { format } from "date-fns";
 import { Link } from "react-router";
 import RandomEventImage from "./random-event-image";
+import { API_BASE_URL } from "../config";
 
 const PublishedEventCard = ({ publishedEvent }) => {
   const [liked, setLiked] = React.useState(false);
