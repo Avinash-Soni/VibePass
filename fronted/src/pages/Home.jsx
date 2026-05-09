@@ -153,94 +153,171 @@ const Home = () => {
       </div>
 
       {/* NAVBAR */}
-      <motion.nav
-        initial={{ y: -80, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.7 }}
-        className="fixed top-0 z-50 w-full border-b border-white/10 bg-black/30 backdrop-blur-2xl"
-      >
-        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+        <motion.nav
+          initial={{ y: -80, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.7 }}
+          className="fixed top-0 z-50 w-full border-b border-white/10 bg-black/30 backdrop-blur-2xl"
+        >
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between">
 
-          {/* LOGO */}
-          <div
-            onClick={() => navigate("/")}
-            className="flex items-center gap-3 cursor-pointer group"
-          >
-            <motion.div
-              whileHover={{ scale: 1.08, rotate: 8 }}
-              className="size-10 rounded-2xl bg-primary flex items-center justify-center shadow-lg shadow-primary/30"
+            {/* LOGO */}
+            <div
+              onClick={() => navigate("/")}
+              className="flex items-center gap-3 cursor-pointer group min-w-0"
             >
-              <Sparkles className="size-5 text-black" />
-            </motion.div>
+              <motion.div
+                whileHover={{ scale: 1.08, rotate: 8 }}
+                className="size-9 sm:size-10 rounded-2xl bg-primary flex items-center justify-center shadow-lg shadow-primary/30 shrink-0"
+              >
+                <Sparkles className="size-4 sm:size-5 text-black" />
+              </motion.div>
 
-            <div>
-              <h1 className="text-2xl font-black tracking-tight">
+              <div className="hidden sm:block">
+                <h1 className="text-2xl font-black tracking-tight">
+                  VibePass
+                </h1>
+
+                <p className="text-[11px] text-gray-500 -mt-1">
+                  Discover Amazing Events
+                </p>
+              </div>
+
+              {/* MOBILE LOGO TEXT */}
+              <h1 className="sm:hidden text-lg font-black tracking-tight truncate">
                 VibePass
               </h1>
-
-              <p className="text-[11px] text-gray-500 -mt-1">
-                Discover Amazing Events
-              </p>
             </div>
-          </div>
 
-          {/* RIGHT */}
-          <div className="flex items-center gap-3">
-            {isAuthenticated ? (
-              <>
-                {isOrganizer && (
+            {/* RIGHT */}
+            <div className="flex items-center gap-2">
+
+              {isAuthenticated ? (
+                <>
+                  {isOrganizer && (
+                    <Button
+                      variant="ghost"
+                      onClick={() => navigate("/organizers")}
+                      className="
+                        hidden sm:flex
+                        h-10
+                        rounded-xl
+                        text-sm
+                        text-gray-300
+                        hover:text-primary
+                        hover:bg-white/5
+                        gap-2
+                      "
+                    >
+                      <LayoutDashboard className="size-4" />
+                      Organizer
+                    </Button>
+                  )}
+
+                  {isAttendee && (
+                    <Button
+                      variant="ghost"
+                      onClick={() => navigate("/dashboard/tickets")}
+                      className="
+                        hidden sm:flex
+                        h-10
+                        rounded-xl
+                        text-sm
+                        text-gray-300
+                        hover:text-primary
+                        hover:bg-white/5
+                        gap-2
+                      "
+                    >
+                      <User className="size-4" />
+                      My Tickets
+                    </Button>
+                  )}
+
+                  {/* MOBILE ICON BUTTONS */}
+                  <div className="flex sm:hidden items-center gap-2">
+
+                    {isOrganizer && (
+                      <Button
+                        size="icon"
+                        variant="ghost"
+                        onClick={() => navigate("/organizers")}
+                        className="size-10 rounded-xl text-gray-300 hover:text-primary hover:bg-white/5"
+                      >
+                        <LayoutDashboard className="size-4" />
+                      </Button>
+                    )}
+
+                    {isAttendee && (
+                      <Button
+                        size="icon"
+                        variant="ghost"
+                        onClick={() => navigate("/dashboard/tickets")}
+                        className="size-10 rounded-xl text-gray-300 hover:text-primary hover:bg-white/5"
+                      >
+                        <User className="size-4" />
+                      </Button>
+                    )}
+                  </div>
+
+                  <Button
+                    variant="outline"
+                    onClick={logout}
+                    className="
+                      h-10
+                      rounded-xl
+                      border-white/10
+                      bg-white/5
+                      hover:bg-red-500/10
+                      hover:text-red-500
+                      gap-2
+                      px-3 sm:px-4
+                    "
+                  >
+                    <LogOut className="size-4" />
+
+                    <span className="hidden sm:block">
+                      Logout
+                    </span>
+                  </Button>
+                </>
+              ) : (
+                <>
                   <Button
                     variant="ghost"
                     onClick={() => navigate("/organizers")}
-                    className="hidden md:flex text-gray-300 hover:text-primary hover:bg-white/5 gap-2"
+                    className="
+                      hidden sm:flex
+                      text-gray-300
+                      hover:text-primary
+                      hover:bg-white/5
+                      rounded-xl
+                    "
                   >
-                    <LayoutDashboard className="size-4" />
-                    Organizer
+                    Organizers
                   </Button>
-                )}
 
-                {isAttendee && (
                   <Button
-                    variant="ghost"
-                    onClick={() => navigate("/dashboard/tickets")}
-                    className="hidden md:flex text-gray-300 hover:text-primary hover:bg-white/5 gap-2"
+                    onClick={() => navigate("/login")}
+                    className="
+                      h-10
+                      rounded-xl
+                      px-4 sm:px-5
+                      text-xs sm:text-sm
+                      bg-primary
+                      hover:bg-primary/90
+                      text-black
+                      font-bold
+                      shadow-lg shadow-primary/30
+                    "
                   >
-                    <User className="size-4" />
-                    My Tickets
+                    Get Started
                   </Button>
-                )}
-
-                <Button
-                  variant="outline"
-                  onClick={logout}
-                  className="border-white/10 bg-white/5 hover:bg-red-500/10 hover:text-red-500 gap-2 rounded-xl"
-                >
-                  <LogOut className="size-4" />
-                  <span className="hidden sm:block">Logout</span>
-                </Button>
-              </>
-            ) : (
-              <>
-                <Button
-                  variant="ghost"
-                  onClick={() => navigate("/organizers")}
-                  className="text-gray-300 hover:text-primary"
-                >
-                  Organizers
-                </Button>
-
-                <Button
-                  onClick={() => navigate("/login")}
-                  className="bg-primary hover:bg-primary/90 text-black font-bold rounded-xl shadow-lg shadow-primary/30"
-                >
-                  Get Started
-                </Button>
-              </>
-            )}
+                </>
+              )}
+            </div>
           </div>
-        </div>
-      </motion.nav>
-
+        </motion.nav>
       {/* HERO */}
       <section className="relative pt-40 pb-24 px-6">
         <motion.div

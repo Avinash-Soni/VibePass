@@ -97,21 +97,42 @@ const OrganizersLandingPage = () => {
           <div className="flex items-center gap-3">
             {isAuthenticated ? (
               <>
-                <Button
-                  variant="ghost"
-                  onClick={() => navigate("/dashboard/events")}
-                  className="hidden md:flex rounded-xl text-gray-300 hover:text-primary hover:bg-white/5"
-                >
-                  Dashboard
-                </Button>
+                <div className="flex items-center gap-2 w-full md:w-auto">
 
-                <Button
-                  variant="outline"
-                  onClick={logout}
-                  className="rounded-xl border-white/10 bg-white/5 hover:bg-red-500/10 hover:text-red-400"
-                >
-                  Logout
-                </Button>
+                  <Button
+                    variant="ghost"
+                    onClick={() => navigate("/dashboard/events")}
+                    className="
+                      flex-1 md:flex-none
+                      h-10 md:h-11
+                      rounded-xl
+                      text-xs sm:text-sm
+                      text-gray-300
+                      hover:text-primary
+                      hover:bg-white/5
+                    "
+                  >
+                    Dashboard
+                  </Button>
+
+                  <Button
+                    variant="outline"
+                    onClick={logout}
+                    className="
+                      flex-1 md:flex-none
+                      h-10 md:h-11
+                      rounded-xl
+                      border-white/10
+                      bg-white/5
+                      text-xs sm:text-sm
+                      hover:bg-red-500/10
+                      hover:text-red-400
+                    "
+                  >
+                    Logout
+                  </Button>
+
+                </div>
               </>
             ) : (
               <Button

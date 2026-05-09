@@ -1,9 +1,7 @@
 "use strict";
 
 import { isErrorResponse } from "@/domain/domain";
-
-// ✅ 1. Define the Base URL at the top
-const API_BASE_URL = "https://vibepass-944b.onrender.com";
+import { API_BASE_URL } from "../config";
 
 /**
  * Helper to handle API responses and consistent error throwing

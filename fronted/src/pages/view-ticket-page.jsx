@@ -89,8 +89,8 @@ const ViewTicketPage = () => {
     return (
       <div className="min-h-screen bg-[#020617] flex items-center justify-center overflow-hidden">
         <div className="relative">
-          <div className="size-16 rounded-full border-4 border-primary/20" />
-          <div className="absolute inset-0 size-16 rounded-full border-4 border-primary border-t-transparent animate-spin" />
+          <div className="size-12 rounded-full border-4 border-primary/20" />
+          <div className="absolute inset-0 size-12 rounded-full border-4 border-primary border-t-transparent animate-spin" />
         </div>
       </div>
     );
@@ -99,7 +99,7 @@ const ViewTicketPage = () => {
   const status = getStatusConfig(ticket?.status, ticket?.used);
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-[#020617] text-white flex items-center justify-center px-4 py-10">
+    <div className="relative min-h-screen overflow-hidden bg-[#020617] text-white flex items-center justify-center px-2 py-2">
 
       {/* BACKGROUND */}
       <div className="fixed inset-0 -z-10 overflow-hidden">
@@ -108,18 +108,18 @@ const ViewTicketPage = () => {
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff08_1px,transparent_1px),linear-gradient(to_bottom,#ffffff08_1px,transparent_1px)] bg-[size:55px_55px]" />
 
         {/* GLOW */}
-        <div className="absolute top-[-10%] left-1/2 -translate-x-1/2 w-[700px] h-[700px] bg-primary/20 blur-[160px] rounded-full animate-pulse" />
+        <div className="absolute top-[-10%] left-1/2 -translate-x-1/2 w-[450px] h-[450px] bg-primary/20 blur-[130px] rounded-full animate-pulse" />
 
-        <div className="absolute bottom-[-20%] right-[-10%] w-[500px] h-[500px] bg-purple-500/10 blur-[120px] rounded-full" />
+        <div className="absolute bottom-[-20%] right-[-10%] w-[320px] h-[320px] bg-purple-500/10 blur-[90px] rounded-full" />
 
         {/* FLOATING LIGHTS */}
-        {[...Array(24)].map((_, i) => (
+        {[...Array(14)].map((_, i) => (
           <div
             key={i}
             className="absolute rounded-full bg-white/10 animate-pulse"
             style={{
-              width: `${Math.random() * 4 + 2}px`,
-              height: `${Math.random() * 4 + 2}px`,
+              width: `${Math.random() * 3 + 1}px`,
+              height: `${Math.random() * 3 + 1}px`,
               top: `${Math.random() * 100}%`,
               left: `${Math.random() * 100}%`,
               animationDelay: `${i * 0.2}s`,
@@ -130,14 +130,14 @@ const ViewTicketPage = () => {
 
       {/* CARD */}
       <motion.div
-        initial={{ opacity: 0, y: 70, scale: 0.9 }}
+        initial={{ opacity: 0, y: 30, scale: 0.96 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={{ duration: 0.7 }}
-        className="w-full max-w-md"
+        transition={{ duration: 0.6 }}
+        className="w-full max-w-[320px]"
       >
         <div
           className={cn(
-            "relative overflow-hidden rounded-[36px] border border-white/10 backdrop-blur-3xl shadow-[0_0_80px_rgba(0,0,0,0.45)]",
+            "relative overflow-hidden rounded-[26px] border border-white/10 backdrop-blur-3xl shadow-[0_0_40px_rgba(0,0,0,0.45)]",
 
             !ticket?.used &&
               "bg-gradient-to-b from-[#111827]/95 via-[#1e1b4b]/95 to-[#312e81]/95",
@@ -149,44 +149,44 @@ const ViewTicketPage = () => {
 
           {/* TOP GLOW */}
           {!ticket?.used && (
-            <div className="absolute -top-32 right-[-20%] w-[320px] h-[320px] bg-primary/20 blur-[100px] rounded-full" />
+            <div className="absolute -top-20 right-[-20%] w-[180px] h-[180px] bg-primary/20 blur-[70px] rounded-full" />
           )}
 
           {/* USED OVERLAY */}
           {ticket?.used && (
             <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none">
-              <div className="text-6xl sm:text-7xl font-black text-white/5 rotate-[-18deg] tracking-[0.3em]">
+              <div className="text-4xl font-black text-white/5 rotate-[-18deg] tracking-[0.3em]">
                 USED
               </div>
             </div>
           )}
 
           {/* TOP BAR */}
-          <div className="h-2 w-full bg-gradient-to-r from-primary via-purple-500 to-pink-500" />
+          <div className="h-1.5 w-full bg-gradient-to-r from-primary via-purple-500 to-pink-500" />
 
           {/* CUTS */}
-          <div className="absolute top-[72%] -left-5 size-10 bg-[#020617] rounded-full border border-white/10" />
-          <div className="absolute top-[72%] -right-5 size-10 bg-[#020617] rounded-full border border-white/10" />
+          <div className="absolute top-[72%] -left-4 size-7 bg-[#020617] rounded-full border border-white/10" />
+          <div className="absolute top-[72%] -right-4 size-7 bg-[#020617] rounded-full border border-white/10" />
 
-          <div className="relative z-10 p-6 sm:p-8">
+          <div className="relative z-10 p-3.5">
 
             {/* BADGE */}
             <div
               className={cn(
-                "inline-flex items-center gap-2 px-4 py-2 rounded-full border backdrop-blur-xl mb-8",
+                "inline-flex items-center gap-1.5 px-3 py-1 rounded-full border backdrop-blur-xl mb-3",
                 status.bg
               )}
             >
               {!ticket?.used &&
                 ticket?.status !== "CANCELLED" && (
-                  <Circle className={cn("size-2 fill-current animate-pulse", status.color)} />
+                  <Circle className={cn("size-1.5 fill-current animate-pulse", status.color)} />
                 )}
 
-              <ShieldCheck className={cn("size-4", status.color)} />
+              <ShieldCheck className={cn("size-3", status.color)} />
 
               <span
                 className={cn(
-                  "text-[10px] font-black uppercase tracking-[0.25em]",
+                  "text-[8px] font-black uppercase tracking-[0.18em]",
                   status.color
                 )}
               >
@@ -199,30 +199,30 @@ const ViewTicketPage = () => {
 
               <motion.div
                 animate={{
-                  y: [0, -6, 0],
+                  y: [0, -3, 0],
                 }}
                 transition={{
                   duration: 3,
                   repeat: Infinity,
                 }}
-                className="mx-auto mb-6 size-20 rounded-3xl bg-primary/10 border border-primary/20 flex items-center justify-center shadow-[0_0_30px_rgba(168,85,247,0.2)]"
+                className="mx-auto mb-3 size-12 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center shadow-[0_0_16px_rgba(168,85,247,0.2)]"
               >
-                <Ticket className="size-9 text-primary" />
+                <Ticket className="size-5 text-primary" />
               </motion.div>
 
-              <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-4 py-2 text-xs text-primary mb-5">
-                <Sparkles className="size-3" />
+              <div className="inline-flex items-center gap-1 rounded-full border border-primary/20 bg-primary/10 px-2.5 py-1 text-[9px] text-primary mb-2">
+                <Sparkles className="size-2.5" />
                 Digital Premium Pass
               </div>
 
-              <h1 className="text-3xl sm:text-4xl font-black leading-tight">
+              <h1 className="text-xl font-black leading-tight line-clamp-2">
                 {ticket.eventName}
               </h1>
 
-              <div className="flex items-center justify-center gap-2 mt-4 text-gray-300">
-                <MapPin className="size-4 text-primary" />
+              <div className="flex items-center justify-center gap-1 mt-2 text-gray-300">
+                <MapPin className="size-3 text-primary" />
 
-                <span className="text-sm font-medium">
+                <span className="text-[11px] font-medium line-clamp-1">
                   {ticket.eventVenue}
                 </span>
               </div>
@@ -233,25 +233,25 @@ const ViewTicketPage = () => {
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.2 }}
-              className="mt-10 flex justify-center"
+              className="mt-4 flex justify-center"
             >
-              <div className="relative bg-white rounded-[28px] p-5 shadow-2xl">
+              <div className="relative bg-white rounded-[20px] p-2.5 shadow-xl">
 
                 {/* QR GLOW */}
-                <div className="absolute inset-0 rounded-[28px] bg-gradient-to-r from-primary/20 to-purple-500/20 blur-xl opacity-50" />
+                <div className="absolute inset-0 rounded-[20px] bg-gradient-to-r from-primary/20 to-purple-500/20 blur-lg opacity-40" />
 
                 <div className="relative z-10">
 
                   {ticket?.used ? (
-                    <div className="size-52 flex items-center justify-center text-center text-gray-500 text-xs font-black uppercase tracking-widest">
-                      PASS ALREADY USED
+                    <div className="size-32 flex items-center justify-center text-center text-gray-500 text-[9px] font-black uppercase tracking-widest">
+                      PASS USED
                     </div>
                   ) : isQrLoading ? (
-                    <div className="size-52 flex items-center justify-center">
-                      <div className="size-10 rounded-full border-4 border-primary/20 border-t-primary animate-spin" />
+                    <div className="size-32 flex items-center justify-center">
+                      <div className="size-7 rounded-full border-4 border-primary/20 border-t-primary animate-spin" />
                     </div>
                   ) : error ? (
-                    <div className="size-52 flex items-center justify-center text-center text-rose-500 text-xs px-6">
+                    <div className="size-32 flex items-center justify-center text-center text-rose-500 text-[9px] px-4">
                       {error}
                     </div>
                   ) : (
@@ -260,7 +260,7 @@ const ViewTicketPage = () => {
                       animate={{ opacity: 1 }}
                       transition={{ duration: 0.4 }}
                       src={qrCodeUrl}
-                      className="size-52 object-contain"
+                      className="size-32 object-contain"
                     />
                   )}
                 </div>
@@ -268,18 +268,18 @@ const ViewTicketPage = () => {
             </motion.div>
 
             {/* INFO */}
-            <div className="mt-10 grid grid-cols-2 gap-4">
+            <div className="mt-4 grid grid-cols-2 gap-2">
 
-              <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4 backdrop-blur-xl">
-                <div className="flex items-center gap-2 text-gray-500 mb-2">
-                  <Calendar className="size-4" />
+              <div className="rounded-xl border border-white/10 bg-white/[0.04] p-2.5 backdrop-blur-xl">
+                <div className="flex items-center gap-1 text-gray-500 mb-1">
+                  <Calendar className="size-3" />
 
-                  <p className="text-[10px] uppercase tracking-widest font-black">
+                  <p className="text-[7px] uppercase tracking-widest font-black">
                     Event Date
                   </p>
                 </div>
 
-                <p className="text-sm font-bold leading-relaxed">
+                <p className="text-[10px] font-bold leading-relaxed">
                   {format(
                     new Date(ticket.eventStart),
                     "MMM d, h:mm a"
@@ -287,29 +287,29 @@ const ViewTicketPage = () => {
                 </p>
               </div>
 
-              <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4 backdrop-blur-xl">
-                <p className="text-[10px] uppercase tracking-widest text-gray-500 font-black mb-2">
+              <div className="rounded-xl border border-white/10 bg-white/[0.04] p-2.5 backdrop-blur-xl">
+                <p className="text-[7px] uppercase tracking-widest text-gray-500 font-black mb-1">
                   Ticket Type
                 </p>
 
-                <p className="text-sm font-bold">
+                <p className="text-[10px] font-bold line-clamp-2">
                   {ticket.description}
                 </p>
               </div>
             </div>
 
             {/* PRICE */}
-            <div className="mt-8 rounded-3xl border border-white/10 bg-black/20 p-6 text-center backdrop-blur-xl">
+            <div className="mt-4 rounded-2xl border border-white/10 bg-black/20 p-3 text-center backdrop-blur-xl">
 
-              <p className="text-[10px] uppercase tracking-[0.3em] text-gray-500 font-black">
+              <p className="text-[7px] uppercase tracking-[0.22em] text-gray-500 font-black">
                 Total Paid
               </p>
 
-              <h2 className="text-5xl font-black mt-3 bg-gradient-to-r from-primary via-purple-400 to-pink-500 bg-clip-text text-transparent">
+              <h2 className="text-2xl font-black mt-1 bg-gradient-to-r from-primary via-purple-400 to-pink-500 bg-clip-text text-transparent">
                 ₹{ticket.price}
               </h2>
 
-              <p className="mt-4 text-[10px] text-gray-600 font-mono break-all">
+              <p className="mt-1 text-[7px] text-gray-600 font-mono break-all">
                 {ticket.id}
               </p>
             </div>
@@ -321,7 +321,7 @@ const ViewTicketPage = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5 }}
-          className="mt-6 text-center text-xs text-gray-500 uppercase tracking-[0.25em]"
+          className="mt-2 text-center text-[9px] text-gray-500 uppercase tracking-[0.18em]"
         >
           Powered by VibePass
         </motion.p>
