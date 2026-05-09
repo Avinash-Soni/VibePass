@@ -46,6 +46,7 @@ import {
 import { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useNavigate, useParams } from "react-router";
+import { API_BASE_URL } from "../config";
 
 const DateTimeSelect = ({
   date,
@@ -148,7 +149,7 @@ const DateTimeSelect = ({
 };
 
 export const getEventStaff = async (token, eventId) => {
-  const res = await fetch(`/api/v1/staff/events/${eventId}`, {
+  const res = await fetch(`${API_BASE_URL}/api/v1/staff/events/${eventId}`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
